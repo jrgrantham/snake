@@ -1,13 +1,7 @@
-import "./App.css";
+import Snake from "./components/Snake/Snake";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1 className="text-9xl text-green-300">Snake</h1>
-      </header>
-    </div>
-  );
+  return <Snake />;
 }
 
 export default App;
