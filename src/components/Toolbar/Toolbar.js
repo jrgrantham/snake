@@ -1,12 +1,8 @@
-const Toolbar = ({ height, lives, score }) => {
+const Toolbar = ({ score }) => {
   return (
-    <div
-      style={{ height: height }}
-      className="flex flex-row items-center text-3xl bg-black text-white"
-    >
-      <div className="p-4">{score}</div>
-      <div className="flex-grow p-4 font-bold text-center">Snake</div>
-      <div className="p-4">{lives}</div>
+    <div className="flex justify-center items-center justify-between w-screen h-32 bg-white text-5xl">
+      <div>🐍</div>
+      <div>{score}</div>
     </div>
   );
 };
