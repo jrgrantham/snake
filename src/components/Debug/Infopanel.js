@@ -4,7 +4,6 @@ const Infopanel = ({ snakePosition, snakeLength, interval, dimensions }) => {
       <div>{`Dimensions ${dimensions.rows} x ${dimensions.cols}`}</div>
       <div>{`Interval (ms) ${interval}`}</div>
       <div>{`Snake head ${snakePosition[[0][0]]}`}</div>
-      <div>{`Snake length ${snakeLength}`}</div>
     </div>
   );
 };

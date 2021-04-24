@@ -11,7 +11,18 @@ import Infopanel from "../Debug/Infopanel";
 
 const getRandomNumber = (n) => Math.floor(Math.random() * n);
 
-const Snake = ({ squares }) => {
+const getRandomDirection = () => {
+  const directions = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+  ];
+  const direction = directions[getRandomNumber(directions.length)];
+  return direction;
+};
+
+const Snake = ({ squares, setScore }) => {
   const numberOfFoodItems = 10;
   const squareSize = 20;
   const intervalMilliseconds = 30;
@@ -20,8 +31,9 @@ const Snake = ({ squares }) => {
   const [lost, setLost] = useState(false);
   const [board, setBoard] = useState();
   const [snakePosition, setSnakePosition] = useState([[0, 0]]);
-  const [direction, setDirection] = useState([0, 1]);
-  const [snakeLength, setSnakeLength] = useState();
+  const [direction, setDirection] = useState(getRandomDirection());
+
+  const debug = false;
 
   const addFoodToBoard = useCallback((board, n, foods = ["🍆", "🍏", "🍕"]) => {
     const newBoard = [...board];
@@ -64,12 +76,6 @@ const Snake = ({ squares }) => {
     [snakePosition]
   );
 
-  const restart = () => {
-    setDirection([0, 1]);
-    setSnakeLength(0);
-    setBoard(getInitialBoard(squares, numberOfFoodItems));
-  };
-
   const getInitialBoard = useCallback(
     (squares, numberOfFoodItems) => {
       const board = [...Array(squares.rows)].map(() =>
@@ -94,6 +100,13 @@ const Snake = ({ squares }) => {
   }, [getInitialBoard, squares]);
 
   useEffect(() => {
+    const restart = () => {
+      setDirection(getRandomDirection());
+
+      setLost(false);
+      setBoard(getInitialBoard(squares, numberOfFoodItems));
+    };
+
     const handler = (e) => {
       switch (e.key) {
         case "ArrowLeft":
@@ -123,7 +136,7 @@ const Snake = ({ squares }) => {
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [lost, restart]);
+  }, [getInitialBoard, lost, squares]);
 
   useEffect(() => {
     const isOutOfBounds = (n) => {
@@ -161,7 +174,7 @@ const Snake = ({ squares }) => {
       }
 
       setSnakePosition([newHead, ...snakeBody]);
-      setSnakeLength(snakeBody.length + 1);
+      setScore(snakeBody.length + 1);
     }, intervalMilliseconds);
 
     return () => {
@@ -175,18 +188,26 @@ const Snake = ({ squares }) => {
     lost,
     addFoodToBoard,
     updateBoard,
+    setScore,
   ]);
 
   return (
     <div className="flex flex-col">
       <Grid board={board} gridSquareSize={squareSize} />
-      <Infopanel
-        snakePosition={snakePosition}
-        snakeLength={snakeLength}
-        interval={intervalMilliseconds}
-        dimensions={{ rows: squares.rows, cols: squares.cols }}
-      />
-      {lost && <div className="text-xs text-red-500 font-bold">Lost</div>}
+      {debug ? (
+        <Infopanel
+          snakePosition={snakePosition}
+          interval={intervalMilliseconds}
+          dimensions={{ rows: squares.rows, cols: squares.cols }}
+        />
+      ) : null}
+
+      {lost && (
+        <div className="text-center my-4">
+          <div className="text-red-500 text-2xl pb-2 font-bold">Game Over</div>
+          <div>Hit Enter to restart</div>
+        </div>
+      )}
     </div>
   );
 };

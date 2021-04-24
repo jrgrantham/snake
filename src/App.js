@@ -10,6 +10,7 @@ const App = () => {
 
   const container = useRef(null);
   const divSize = useDivSize(container);
+  const [maximumGameGridSize, setMaximumGridSize] = useState(0);
   const [squares, setNumberOfSquares] = useState({});
 
   const [score, setScore] = useState(0);
@@ -38,7 +39,7 @@ const App = () => {
       rows: gameGridSize,
       cols: gameGridSize,
     };
-
+    setMaximumGridSize(maximumGameGridSize);
     setNumberOfSquares(squares);
   }, [divSize]);
 
@@ -47,8 +48,10 @@ const App = () => {
       ref={container}
       className="flex flex-col justify-start items-center h-screen w-screen"
     >
-      <Toolbar score={score} />
-      {squares.rows && squares.cols ? <Snake squares={squares} /> : null}
+      <Toolbar width={maximumGameGridSize} score={score} />
+      {squares.rows && squares.cols ? (
+        <Snake squares={squares} setScore={setScore} />
+      ) : null}
     </div>
   );
 };

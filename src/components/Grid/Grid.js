@@ -11,7 +11,7 @@ const Grid = ({ board, gridSquareSize }) => {
       for (let j = 0; j < rows; j++) {
         content.push(
           <div
-            className="flex items-center justify-center bg-white border border-black text-lg"
+            className="flex items-center justify-center bg-white border border-gray-200 text-xs"
             style={{
               width: gridSquareSize,
               height: gridSquareSize,
